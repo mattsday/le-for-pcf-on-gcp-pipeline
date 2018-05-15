@@ -1,0 +1,52 @@
+---
+jobs:
+- name: check-cert-needs-renewal
+  plan:
+  - get: git-pipeline
+  - get: schedule
+    trigger: true
+  - task: check-cert
+    file: git-pipeline/tasks/check-cert.yml
+    params:
+      GCP_CREDENTIALS: {{GCP_CREDENTIALS}}
+      GCP_HTTPS_PROXY: {{GCP_HTTPS_PROXY}}
+      CERT_RENEW_BEFORE: {{CERT_RENEW_BEFORE}}
+- name: update-old-certificate
+  plan:
+  - get: git-pipeline
+    trigger: true
+    passed:
+    - check-cert-needs-renewal
+  - task: update-cert
+    file: git-pipeline/tasks/update-cert.yml
+    params:
+      GCP_CREDENTIALS: {{GCP_CREDENTIALS}}
+      GCP_HTTPS_PROXY: {{GCP_HTTPS_PROXY}}
+      CF_DOMAINS: {{CF_DOMAINS}}
+      LE_SERVER: {{LE_SERVER}}
+      LE_EMAIL: {{LE_EMAIL}}
+      PCF_USER: {{PCF_USER}}
+      PCF_OPSMGR: {{PCF_OPSMGR}}
+      PCF_PASSWD: {{PCF_PASSWD}}
+      GCP_CERT_NAME: {{GCP_CERT_NAME}}
+      GCP_HTTPS_PROXY: {{GCP_HTTPS_PROXY}}
+      OPSMAN_CERT_NAME: {{OPSMAN_CERT_NAME}}
+      GCP_DNS_WAIT: {{GCP_DNS_WAIT}}
+      SKIP_PAS_CERT: {{SKIP_PAS_CERT}}
+      SKIP_PKS_CERT: {{SKIP_PKS_CERT}}
+      SKIP_GCP_CERT: {{SKIP_GCP_CERT}}
+      SKIP_HARBOR_CERT: {{SKIP_HARBOR_CERT}}
+      SKIP_OPSMAN_APPLY: {{SKIP_OPSMAN_APPLY}} 
+resources:
+- name: git-pipeline
+  type: git
+  source:
+    branch: master
+    uri: https://github.com/mattsday/le-for-pcf-on-gcp-pipeline
+- name: schedule
+  type: time
+  source:
+    interval: 24h
+    start: "01:00 AM"
+    stop: "03:00 AM"
+    days: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]

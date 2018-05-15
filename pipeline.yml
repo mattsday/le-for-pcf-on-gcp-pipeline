@@ -46,7 +46,7 @@ resources:
 - name: schedule
   type: time
   source:
-    interval: 60s
-#    start: "01:00 AM"
- #   stop: "03:00 AM"
+    interval: 24h
+    start: "01:00 AM"
+    stop: "03:00 AM"
     days: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]

@@ -22,6 +22,9 @@ echo ${GCP_CREDENTIALS} | tee ${GCP_CREDENTIALS_FILE} >/dev/null
 
 export PATH="$PATH:/google-cloud-sdk/bin"
 
+GCP_PROJECT_ID=$(cat ${GCP_CREDENTIALS_FILE} | jq -r '.project_id')
+gcloud config set project ${GCP_PROJECT_ID} 
+
 echo Generating certificate
 
 certbot certonly -n --agree-tos --email ${LE_EMAIL} \

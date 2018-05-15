@@ -8,6 +8,9 @@ if [ -z "${CERT_RENEW_BEFORE}" ]; then echo Setting cert renewall to 7 days; CER
 echo ${GCP_CREDENTIALS} | tee ${GCP_CREDENTIALS_FILE} >/dev/null
 export PATH="$PATH:/google-cloud-sdk/bin"
 
+GCP_PROJECT_ID=$(cat ${GCP_CREDENTIALS_FILE} | jq -r '.project_id')
+gcloud config set project ${GCP_PROJECT_ID} 
+
 # Login to GCP
 gcloud auth activate-service-account --key-file=${GCP_CREDENTIALS_FILE}
 
@@ -17,7 +20,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Get current certificate name
-CERT_NAME=$(gcloud compute target-https-proxies describe ${GCP_HTTPS_PROXY} --format=json | jq '.sslCertificates[0]' | xargs basename)
+CERT_NAME=$(gcloud compute --project=${GCP_PROJECT_ID} target-https-proxies describe ${GCP_HTTPS_PROXY} --format=json | jq '.sslCertificates[0]' | xargs basename)
 
 if [ -z ${CERT_NAME} ]; then
 	echo Cannot find certificate in GCP

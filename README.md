@@ -1,13 +1,13 @@
 # Letsencrypt Pipeline for PCF on GCP
 This is a [concourse pipeline](https://concourse-ci.org/) that performs the following actions:
 
-    1. Checks if your current PCF certificate is about to expire
-    2. Requests new wildcard certificates from letsencrypt
-    3. Updates the Google Load Balancer
-    4. Updates the following PCF components:
-        * PAS
-        * PKS
-        * VMware Harbor
+1. Checks if your current PCF certificate is about to expire
+2. Requests new wildcard certificates from letsencrypt
+3. Updates the Google Load Balancer
+4. Updates the following PCF components:
+	* PAS
+	* PKS
+	* VMware Harbor
 
 ## Getting Started
 You should have your DNS delegated to GCP in the same project as PCF is installed.

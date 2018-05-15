@@ -20,7 +20,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Get current certificate name
-CERT_NAME=$(gcloud compute --project=${GCP_PROJECT_ID} target-https-proxies describe ${GCP_HTTPS_PROXY} --format=json | jq '.sslCertificates[0]' | xargs basename)
+CERT_NAME=$(gcloud compute target-https-proxies describe ${GCP_HTTPS_PROXY} --format=json | jq '.sslCertificates[0]' | xargs basename)
 
 if [ -z ${CERT_NAME} ]; then
 	echo Cannot find certificate in GCP

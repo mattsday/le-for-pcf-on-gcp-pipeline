@@ -93,6 +93,9 @@ if [ ${SKIP_HARBOR_CERT} = false ]; then
 				\"cert_pem\": \"${FULL_CHAIN}\",
 				\"private_key_pem\": \"${PRIV_KEY}\"
 			}
+		},
+		\".properties.server_cert_ca\": {
+			\"value\": \"${FULL_CHAIN}\"
 		}
 	}" | jq -c -M '.')
 	

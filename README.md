@@ -21,3 +21,6 @@ One that is done and you are logged in to concourse, create the pipeline:
 ```
 
 By default it will trigger every 24 Hours and check if your current certificate is out of date. If it is, it will go ahead and do all the work for you.
+
+## Docker Image
+The scripts use the custom docker image `mattsday/le-pcf-on-gcp-base`, the source for which you can find in the `docker-base-img/` folder.

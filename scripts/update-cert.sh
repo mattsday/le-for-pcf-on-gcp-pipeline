@@ -15,6 +15,7 @@ if [ -z "${GCP_DNS_WAIT}" ]; then echo Setting DNS Propogation wait timer to 120
 if [ -z "${SKIP_PAS_CERT}" ]; then echo Updating PAS Certificate by default; SKIP_PAS_CERT=false; fi
 if [ -z "${SKIP_PKS_CERT}" ]; then echo Updating PKS Certificate by default; SKIP_PKS_CERT=false; fi
 if [ -z "${SKIP_HARBOR_CERT}" ]; then echo Updating Harbor Certificate by default; SKIP_HARBOR_CERT=false; fi
+if [ -z "${SKIP_RABBIT_MQ_CERT}" ]; then echo Updating RabbitMQ Certificate by default; SKIP_RABBIT_MQ_CERT=false; fi
 if [ -z "${SKIP_GCP_CERT}" ]; then echo Updating GCP Certificate by default; SKIP_GCP_CERT=false; fi
 if [ -z "${SKIP_OPSMAN_APPLY}" ]; then echo Applying changes in ops manager by default; SKIP_OPSMAN_APPLY=false; fi
 
@@ -118,6 +119,24 @@ if [ ${SKIP_PKS_CERT} = false ]; then
 	om -k -u "${PCF_USER}" -p "${PCF_PASSWD}" -t "${PCF_OPSMGR}" configure-product --product-name pivotal-container-service -p "${PKS_JSON}"
 else
 	echo Skipping updating PKS Certificate
+fi
+
+if [ ${SKIP_RABBIT_MQ_CERT} = false ]; then
+	echo Updating RabbitMQ Certificate
+	RMQ_JSON=$(echo "{
+	\".rabbitmq-server.rsa_certificate\": {
+		\"value\": {
+	        "private_key_pem": \"${PRIV_KEY}\",
+			"cert_pem": \"${FULL_CHAIN}\"
+		},
+	},
+	".rabbitmq-server.ssl_cacert": {
+		"value": \"${FULL_CHAIN}\"
+	}" | jq -c -M '.')
+
+	om -k -u "${PCF_USER}" -p "${PCF_PASSWD}" -t "${PCF_OPSMGR}" configure-product --product-name p-rabbitmq -p "${RMQ_JSON}"
+else
+	echo Skipping updating RabbitMQ Certificate
 fi
 
 if [ ${SKIP_OPSMAN_APPLY} = false ]; then

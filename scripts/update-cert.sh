@@ -126,13 +126,13 @@ if [ ${SKIP_RABBIT_MQ_CERT} = false ]; then
 	RMQ_JSON=$(echo "{
 	\".rabbitmq-server.rsa_certificate\": {
 		\"value\": {
-	        "private_key_pem": \"${PRIV_KEY}\",
-			"cert_pem": \"${FULL_CHAIN}\"
-		},
+	        \"private_key_pem\": \"${PRIV_KEY}\",
+			\"cert_pem\": \"${FULL_CHAIN}\"
+		}
 	},
-	".rabbitmq-server.ssl_cacert": {
-		"value": \"${FULL_CHAIN}\"
-	}" | jq -c -M '.')
+	\".rabbitmq-server.ssl_cacert\": {
+		\"value\": \"${FULL_CHAIN}\"
+	}}" | jq -c -M '.')
 
 	om -k -u "${PCF_USER}" -p "${PCF_PASSWD}" -t "${PCF_OPSMGR}" configure-product --product-name p-rabbitmq -p "${RMQ_JSON}"
 else

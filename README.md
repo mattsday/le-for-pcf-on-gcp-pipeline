@@ -8,6 +8,7 @@ This is a [concourse pipeline](https://concourse-ci.org/) that performs the foll
 	* PAS
 	* PKS
 	* VMware Harbor
+	* RabbitMQ
 
 ## Getting Started
 You should have your DNS delegated to GCP in the same project as PCF is installed.

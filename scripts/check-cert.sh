@@ -23,9 +23,7 @@ GCP_PROJECT_ID=$(jq -r '.project_id' "${GCP_CREDENTIALS_FILE}")
 gcloud config set project "${GCP_PROJECT_ID}"
 
 # Login to GCP
-gcloud auth activate-service-account --key-file="${GCP_CREDENTIALS_FILE}"
-
-if [ $? -ne 0 ]; then
+if ! gcloud auth activate-service-account --key-file="${GCP_CREDENTIALS_FILE}"; then
 	echo Logging in to GCP failed
 	exit 1
 fi

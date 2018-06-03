@@ -9,11 +9,10 @@ chmod +x /usr/local/bin/om
 wget "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-200.0.0-linux-x86_64.tar.gz" -O cloud-sdk.tar.gz
 tar zxvf cloud-sdk.tar.gz
 rm cloud-sdk.tar.gz
-cd google-cloud-sdk
+cd google-cloud-sdk || exit 1
 ./install.sh --usage-reporting false -q
-echo 'export PATH=$PATH:/google-cloud-sdk/bin' >> ~/.bashrc
 
-cd /
+cd / || exit 1
 
 /google-cloud-sdk/bin/gcloud components update --quiet
 

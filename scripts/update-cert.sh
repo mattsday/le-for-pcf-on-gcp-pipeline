@@ -99,9 +99,7 @@ PRIV_KEY=/etc/letsencrypt/live/le/privkey.pem
 if [ "${SKIP_GCP_CERT}" = false ]; then
 	echo Updating Google Load Balancer Certificate
 	# Create cert in GCP
-	gcloud auth activate-service-account --key-file="${GCP_CREDENTIALS_FILE}"
-
-	if [ $? -ne 0 ]; then
+	if ! gcloud auth activate-service-account --key-file="${GCP_CREDENTIALS_FILE}"; then
 		echo Logging in to GCP failed
 		exit 1
 	fi
